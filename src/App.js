@@ -6,6 +6,8 @@ import Filter from "./components/Filter";
 import Container from "./AppContainer.styled";
 import GlobalStyle from "./components/GlobalStyle";
 
+const LS_KEY = "contacts";
+
 class App extends Component {
   state = {
     contacts: [
@@ -16,6 +18,23 @@ class App extends Component {
     ],
     filter: "",
   };
+
+  componentDidMount() {
+    const contacts = JSON.parse(localStorage.getItem(LS_KEY));
+
+    if (!contacts) {
+      return;
+    }
+    this.setState({ contacts });
+  }
+
+  componentDidUpdate(_, prevState) {
+    const { contacts } = this.state;
+
+    if (prevState.contacts !== contacts) {
+      localStorage.setItem(LS_KEY, JSON.stringify(contacts));
+    }
+  }
 
   handleSubmit = (person) => {
     const inContacts = this.state.contacts.find(
