@@ -1,5 +1,5 @@
 import "./AppContainer.styled";
-import { Component } from "react";
+import { useState, useEffect } from "react";
 import ContactForm from "./components/ContactForm";
 import ContactList from "./components/ContactList";
 import Filter from "./components/Filter";
@@ -8,63 +8,51 @@ import GlobalStyle from "./components/GlobalStyle";
 
 const LS_KEY = "contacts";
 
-class App extends Component {
-  state = {
-    contacts: [
-      { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-      { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-      { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-      { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-    ],
-    filter: "",
-  };
+function App() {
+  const [contacts, setContacts] = useState([
+    { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
+    { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
+    { id: "id-3", name: "Eden Clements", number: "645-17-79" },
+    { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
+  ]);
 
-  componentDidMount() {
-    const contacts = JSON.parse(localStorage.getItem(LS_KEY));
+  const [filter, setFilter] = useState("");
 
-    if (!contacts) {
-      return;
+  useEffect(() => {
+    const LSContacts = JSON.parse(localStorage.getItem(LS_KEY));
+
+    if (LSContacts) {
+      setContacts([...LSContacts]);
     }
-    this.setState({ contacts });
-  }
+  }, []);
 
-  componentDidUpdate(_, prevState) {
-    const { contacts } = this.state;
+  useEffect(() => {
+    window.localStorage.setItem(LS_KEY, JSON.stringify(contacts));
+  }, [contacts]);
 
-    if (prevState.contacts !== contacts) {
-      localStorage.setItem(LS_KEY, JSON.stringify(contacts));
-    }
-  }
-
-  handleSubmit = (person) => {
-    const inContacts = this.state.contacts.find(
-      (el) => el.name === person.name
-    );
+  const handleSubmit = (person) => {
+    const inContacts = contacts.find((contact) => contact.name === person.name);
 
     if (inContacts) {
       alert(`${person.name} is already in contacts`);
       return;
     }
-
-    this.setState(({ contacts }) => {
-      return {
-        contacts: [...contacts, person],
-      };
-    });
+    setContacts((prevState) => [...prevState, person]);
   };
 
-  handleDeleteContact = (id) => {
-    const contacts = this.state.contacts.filter((contact) => contact.id !== id);
-    this.setState({ contacts });
+  const handleDeleteContact = (id) => {
+    const contactsAfterDeletion = contacts.filter(
+      (contact) => contact.id !== id
+    );
+    setContacts(contactsAfterDeletion);
   };
 
-  handleFilterChange = ({ currentTarget }) => {
+  const handleFilterChange = ({ currentTarget }) => {
     const value = currentTarget.value;
-    this.setState({ filter: value });
+    setFilter(value);
   };
 
-  getFilteredContacts = () => {
-    const { filter, contacts } = this.state;
+  const getFilteredContacts = () => {
     const filteredContacts = filter.toLowerCase();
 
     return contacts.filter(
@@ -74,27 +62,22 @@ class App extends Component {
     );
   };
 
-  render() {
-    const filteredContacts = this.getFilteredContacts();
+  const filteredContacts = getFilteredContacts();
 
-    return (
-      <Container>
-        <GlobalStyle />
-        <h1>Phonebook</h1>
-        <ContactForm onSubmit={this.handleSubmit} />
-        <h2>Contacts</h2>
-        <Filter
-          value={this.state.filter}
-          handleInputChange={this.handleFilterChange}
-        />
-        <ContactList
-          contacts={this.state.contacts}
-          filteredContacts={filteredContacts}
-          handleDelete={this.handleDeleteContact}
-        />
-      </Container>
-    );
-  }
+  return (
+    <Container>
+      <GlobalStyle />
+      <h1>Phonebook</h1>
+      <ContactForm onSubmit={handleSubmit} />
+      <h2>Contacts</h2>
+      <Filter value={filter} handleInputChange={handleFilterChange} />
+      <ContactList
+        contacts={contacts}
+        filteredContacts={filteredContacts}
+        handleDelete={handleDeleteContact}
+      />
+    </Container>
+  );
 }
 
 export default App;
