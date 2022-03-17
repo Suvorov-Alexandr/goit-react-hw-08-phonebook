@@ -1,7 +1,14 @@
+import { useSelector, useDispatch } from "react-redux";
 import { Wrapper, Text, List, Item, Button } from "./ContactList.styled";
-import PropTypes from "prop-types";
+import * as actions from "../../redux/actions";
+import { getContacts, getFilteredContacts } from "../../redux/selectors";
 
-function ContactList({ contacts, filteredContacts, handleDelete }) {
+function ContactList() {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+  const filteredContacts = useSelector(getFilteredContacts);
+  const removeContact = (id) => dispatch(actions.deleteContact(id));
+
   return (
     <Wrapper>
       {contacts.length === 0 ? (
@@ -16,7 +23,7 @@ function ContactList({ contacts, filteredContacts, handleDelete }) {
                 <Text>
                   {name}: {number}
                 </Text>
-                <Button type="button" onClick={() => handleDelete(id)}>
+                <Button type="button" onClick={() => removeContact(id)}>
                   Delete
                 </Button>
               </Item>
@@ -27,17 +34,5 @@ function ContactList({ contacts, filteredContacts, handleDelete }) {
     </Wrapper>
   );
 }
-
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ),
-  filteredContacts: PropTypes.arrayOf(PropTypes.object),
-  handleDelete: PropTypes.func,
-};
 
 export default ContactList;
