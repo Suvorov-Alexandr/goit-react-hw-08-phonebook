@@ -1,46 +1,70 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 import { Wrapper, Form, Label, Input, Button } from "./ContactForm.styled";
-import * as actions from "../../redux/actions";
-import { getContacts } from "../../redux/selectors";
+import { getContacts } from "redux/selectors";
+import { useAddContactMutation } from "redux/contactsApi";
 
 function ContactForm() {
   const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
-  const contacts = useSelector(getContacts);
-  const dispatch = useDispatch();
+  const [phone, setPhone] = useState("");
+  const { data: contacts } = useSelector(getContacts);
+  const [addContact, { isLoading }] = useAddContactMutation();
 
-  const handleInputChange = ({ currentTarget }) => {
-    const { name, value } = currentTarget;
-    name === "name" ? setName(value) : setNumber(value);
+  const handleInputChange = ({ target }) => {
+    const { name, value } = target;
+    name === "name" ? setName(value) : setPhone(value);
   };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
     const contact = {
-      name: evt.currentTarget.name.value,
-      number: evt.currentTarget.number.value,
+      name: evt.target.name.value,
+      phone: evt.target.phone.value,
     };
 
-    contacts.find(({ name }) => name === contact.name)
-      ? alert(`${contact.name} is already in contacts`)
-      : dispatch(actions.addContact(contact));
+    const toastNameError = (name) =>
+      toast.error(`Name "${name}" is already in contacts`);
 
+    const toastPhoneError = (phone) =>
+      toast.error(`Phone "${phone}" is already in contacts`);
+
+    const toastSuccess = () =>
+      toast.success(
+        `"${contact.name}" has been succesfully added to the phonebook`
+      );
+
+    const isNameExist = contacts?.find(({ name }) => name === contact.name);
+    if (isNameExist) {
+      toastNameError(contact.name);
+      return;
+    }
+
+    const isPhoneExist = contacts?.find(({ phone }) => phone === contact.phone);
+    if (isPhoneExist) {
+      toastPhoneError(contact.phone);
+      return;
+    }
+
+    addContact(contact, toastSuccess());
     reset();
   };
 
   const reset = () => {
     setName("");
-    setNumber("");
+    setPhone("");
   };
 
   return (
     <Wrapper>
       <Form onSubmit={handleSubmit}>
         <Label>
-          Name
           <Input
+            margin="normal"
+            size="small"
+            id="outlined-required"
+            label="Name"
             type="text"
             name="name"
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -48,21 +72,29 @@ function ContactForm() {
             required
             value={name}
             onChange={handleInputChange}
+            placeholder="Ivan Ivanov"
           />
           <Label>
-            Number
             <Input
+              margin="normal"
+              size="small"
+              id="outlined-required"
+              label="Phone"
               type="tel"
-              name="number"
+              name="phone"
               pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
               title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
               required
-              value={number}
+              value={phone}
               onChange={handleInputChange}
+              minLength={10}
+              placeholder="000-11-33-777"
             />
           </Label>
         </Label>
-        <Button type="submit">Add contact</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? "Adding..." : "Add contact"}
+        </Button>
       </Form>
     </Wrapper>
   );

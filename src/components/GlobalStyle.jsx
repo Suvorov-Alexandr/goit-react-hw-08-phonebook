@@ -26,14 +26,10 @@ const GlobalStyle = createGlobalStyle`
     list-style: none;
   }
   
-  h1{
-    text-align: center
+  h1, h2{
+    text-align: center;
+    margin: 0 0 5px 0;
   };
-  
-  h2{
-    text-align: center
-  };
-
   h3,
   h4,
   h5,

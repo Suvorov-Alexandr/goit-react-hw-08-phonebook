@@ -1,23 +1,30 @@
 import { useDispatch, useSelector } from "react-redux";
+import { DebounceInput } from "react-debounce-input";
 import { Wrapper, Text, Input } from "./Filter.styled";
-import * as actions from "../../redux/actions";
-import { getFilter } from "../../redux/selectors";
+import { inputСhanges } from "redux/actions";
+import { getFilter } from "redux/selectors";
 
 function Filter() {
   const dispatch = useDispatch();
   const value = useSelector(getFilter);
-  const setFilter = ({ currentTarget: { value } }) =>
-    dispatch(actions.inputСhanges(value));
+  const setFilter = ({ target: { value } }) => dispatch(inputСhanges(value));
 
   return (
     <Wrapper>
       <Text>Find contacts by name</Text>
-      <Input
+      <DebounceInput
+        element={Input}
+        minLength={2}
+        debounceTimeout={300}
+        margin="normal"
+        size="small"
+        label="Find contact..."
         type="text"
         name="filter"
         onChange={setFilter}
         value={value}
-      ></Input>
+        placeholder="Enter contact name..."
+      ></DebounceInput>
     </Wrapper>
   );
 }
