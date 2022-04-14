@@ -9,17 +9,14 @@ function FetchContacts() {
 
   return (
     <Wrapper>
-      {isFetching ? (
-        <Loader />
-      ) : (
-        <>
-          {contacts.length === 0 ? (
-            <Text>No contacts added</Text>
-          ) : (
-            <ContactList contacts={contacts} />
-          )}
-        </>
-      )}
+      {isFetching ? <Loader /> : null}
+      <>
+        {contacts.length ? (
+          <ContactList contacts={contacts} />
+        ) : (
+          <Text>No contacts added</Text>
+        )}
+      </>
     </Wrapper>
   );
 }

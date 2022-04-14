@@ -10,7 +10,19 @@ const Item = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 0;
+  padding: 5px;
+  border: 2px solid #bf00e3;
+  border-radius: 5px;
+  transition: transform 250ms linear;
+
+  &:hover {
+    transform: scale(1.01);
+    background-color: #f0abf7;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
 `;
 
 const Button = styled.button`

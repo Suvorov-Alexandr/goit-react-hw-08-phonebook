@@ -4,7 +4,7 @@ const Wrapper = styled.div`
   margin: 0 auto 5px auto;
   padding: 15px;
   display: block;
-  width: 370px;
+  width: 390px;
 `;
 
 const Text = styled.p`

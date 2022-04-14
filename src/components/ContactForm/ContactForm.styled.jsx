@@ -2,7 +2,7 @@ import styled from "styled-components";
 import TextField from "@mui/material/TextField";
 
 const Wrapper = styled.div`
-  margin: 0 auto 5px auto;
+  margin: 0 auto 30px auto;
   padding: 15px;
   display: block;
   width: 350px;

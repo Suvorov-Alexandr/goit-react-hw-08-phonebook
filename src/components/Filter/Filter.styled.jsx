@@ -10,7 +10,6 @@ const Wrapper = styled.div`
 `;
 
 const Text = styled.p`
-  margin-bottom: 10px;
   font-weight: 700;
   letter-spacing: 0.03em;
 `;

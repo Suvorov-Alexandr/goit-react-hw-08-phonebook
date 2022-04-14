@@ -73,6 +73,7 @@ function ContactForm() {
             value={name}
             onChange={handleInputChange}
             placeholder="Ivan Ivanov"
+            autoComplete="off"
           />
           <Label>
             <Input
@@ -89,6 +90,7 @@ function ContactForm() {
               onChange={handleInputChange}
               minLength={10}
               placeholder="000-11-33-777"
+              autoComplete="off"
             />
           </Label>
         </Label>
