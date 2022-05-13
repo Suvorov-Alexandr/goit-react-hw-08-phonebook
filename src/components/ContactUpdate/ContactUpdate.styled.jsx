@@ -35,7 +35,6 @@ const Input = styled.input`
   border-radius: 3px;
   padding: 6px 10px;
   outline: none;
-  /* background: transparent; */
   font-size: 16px;
   font-family: Arial, sans-serif;
   line-height: 1;

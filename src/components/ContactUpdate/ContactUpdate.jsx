@@ -11,9 +11,9 @@ import {
   Button,
 } from "./ContactUpdate.styled";
 
-function ContactUpdate({ name, phone, onUpdate, onClose, isUpdating }) {
+function ContactUpdate({ name, number, onUpdate, onClose, isUpdating }) {
   const [rename, setRename] = useState(name);
-  const [rephone, setRephone] = useState(phone);
+  const [rephone, setRephone] = useState(number);
 
   const toastSuccessUpdating = () =>
     toast.success(
@@ -25,12 +25,12 @@ function ContactUpdate({ name, phone, onUpdate, onClose, isUpdating }) {
     name === "name" ? setRename(value) : setRephone(value);
   };
 
-  const handleSubmit = (evt) => {
+  const handlerSubmit = (evt) => {
     evt.preventDefault();
 
     const contact = {
       name: rename,
-      phone: rephone,
+      number: rephone,
     };
 
     onUpdate(contact);
@@ -42,7 +42,7 @@ function ContactUpdate({ name, phone, onUpdate, onClose, isUpdating }) {
     <Wrapper>
       <h1>Updating contact</h1>
       <Text>{`Are you sure that you wanna update "${name}"?`}</Text>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handlerSubmit}>
         <Label>
           <b>Name</b>
           <Input
@@ -56,7 +56,7 @@ function ContactUpdate({ name, phone, onUpdate, onClose, isUpdating }) {
             <b>Phone</b>
             <Input
               type="tel"
-              name="phone"
+              name="number"
               value={rephone}
               onChange={handleInputChange}
               autoComplete="off"

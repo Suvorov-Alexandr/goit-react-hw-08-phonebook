@@ -4,13 +4,14 @@ const Wrapper = styled.div`
   margin: 0 auto 5px auto;
   padding: 15px;
   display: block;
-  width: 390px;
+  width: 400px;
 `;
 
 const Text = styled.p`
   margin-bottom: 10px;
   font-weight: 700;
   letter-spacing: 0.03em;
+  text-align: center;
 `;
 
 const List = styled.ul`

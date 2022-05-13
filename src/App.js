@@ -1,30 +1,47 @@
-import "AppContainer.styled";
-import ContactForm from "components/ContactForm";
-import ContactList from "components/ContactList";
-import Filter from "components/Filter";
+import { Route, Routes } from "react-router-dom";
 import Container from "AppContainer.styled";
 import GlobalStyle from "components/GlobalStyle";
-import FetchContacts from "components/FetchContacts";
+import PrivateRoute from "components/PrivateRoute";
+import PublicRoute from "components/PublicRoute";
+import LoginView from "views/LoginView";
+import ContactsView from "views/ContactsView";
+import { useFetchCurrentUserQuery } from "redux/contactsApi";
+import UserMenu from "components/UserMenu";
+import Loader from "components/Loader";
 import Toast from "components/Toast";
-import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
-import ContactsIcon from "@mui/icons-material/Contacts";
 
 function App() {
+  const { isFetching } = useFetchCurrentUserQuery();
   return (
-    <Container>
-      <GlobalStyle />
-      <h1>
-        <ContactPhoneIcon color="primary" /> Phonebook
-      </h1>
-      <ContactForm />
-      <h2>
-        <ContactsIcon color="primary" /> Contacts
-      </h2>
-      <Filter />
-      <FetchContacts />
-      <ContactList />
-      <Toast />
-    </Container>
+    <>
+      <UserMenu />
+      <Container>
+        <GlobalStyle />
+        {isFetching ? (
+          <Loader />
+        ) : (
+          <Routes>
+            <Route
+              path="contacts"
+              element={
+                <PrivateRoute>
+                  <ContactsView />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="*"
+              element={
+                <PublicRoute restricted={true}>
+                  <LoginView />
+                </PublicRoute>
+              }
+            />
+          </Routes>
+        )}
+        <Toast />
+      </Container>
+    </>
   );
 }
 

@@ -8,7 +8,7 @@ import {
 import { Text, Item, Button } from "./ContactItem.styled";
 import ContactUpdate from "components/ContactUpdate";
 
-function ContactItem({ id, name, phone }) {
+function ContactItem({ id, name, number }) {
   const [deleteContact, { isLoading: isDeleting }] = useDeleteContactMutation();
   const [updateContact, { isLoading: isUpdating }] = useUpdateContactMutation();
 
@@ -32,7 +32,7 @@ function ContactItem({ id, name, phone }) {
     });
   };
 
-  const handleUpdateContact = (contact) => {
+  const handleContactUpdate = (contact) => {
     const data = { ...contact, id };
     updateContact(data);
   };
@@ -43,8 +43,8 @@ function ContactItem({ id, name, phone }) {
         return (
           <ContactUpdate
             name={name}
-            phone={phone}
-            onUpdate={handleUpdateContact}
+            number={number}
+            onUpdate={handleContactUpdate}
             onClose={onClose}
             isUpdating={isUpdating}
           />
@@ -56,7 +56,7 @@ function ContactItem({ id, name, phone }) {
   return (
     <Item key={id}>
       <Text>
-        {name}:<br /> {phone}
+        {name}:<br /> {number}
       </Text>
       <div>
         <Button

@@ -28,7 +28,7 @@ const GlobalStyle = createGlobalStyle`
   
   h1, h2{
     text-align: center;
-    margin: 0 0 5px 0;
+    margin: 0 0 15px 0;
   };
   h3,
   h4,
@@ -36,6 +36,22 @@ const GlobalStyle = createGlobalStyle`
   h6,
   p {
     margin: 0;
+  }
+
+  .MuiOutlinedInput-input{
+    width: 275px;
+  }
+
+  .css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input{
+    height: 18px;
+    padding: 13.5px 14px;
+  }
+
+  .css-106c1u2-MuiBadge-badge{
+    min-width: 27px;
+    height: 27px;
+    font-size: 1.2rem;
+    border-radius: 15px;
   }
 `;
 

@@ -1,14 +1,14 @@
 import { useFetchAllContactsQuery } from "redux/contactsApi";
 import ContactList from "components/ContactList";
 import Loader from "components/Loader";
-import { Wrapper } from "../ContactList/ContactList.styled";
 import Text from "./FetchContacts.styled";
 
 function FetchContacts() {
-  const { data: contacts = [], isFetching } = useFetchAllContactsQuery();
+  const { data, isFetching } = useFetchAllContactsQuery();
+  const contacts = data ? Object.values(data.entities) : [];
 
   return (
-    <Wrapper>
+    <>
       {isFetching ? <Loader /> : null}
       <>
         {contacts.length ? (
@@ -17,7 +17,7 @@ function FetchContacts() {
           <Text>No contacts added</Text>
         )}
       </>
-    </Wrapper>
+    </>
   );
 }
 

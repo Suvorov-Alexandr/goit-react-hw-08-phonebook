@@ -5,7 +5,7 @@ const Wrapper = styled.div`
   margin: 0 auto 30px auto;
   padding: 15px;
   display: block;
-  width: 350px;
+  width: 333px;
   text-align: center;
 `;
 
@@ -21,31 +21,26 @@ const Label = styled.label`
 const Input = styled(TextField)`
   display: block;
   width: 300px;
-  border: 2px solid #0a65ee;
-  border-radius: 3px;
-  padding: 6px 10px;
   outline: none;
   background: transparent;
   font-size: 16px;
   font-family: Arial, sans-serif;
   line-height: 1;
-  margin-top: 10px;
-  margin-bottom: 10px;
 `;
 
 const Button = styled.button`
   -webkit-appearance: none;
   display: block;
-  width: 115px;
+  width: 100px;
   border: 0;
   border-radius: 5px;
   background: #0a65ee;
   color: #fff;
   font-weight: 400;
   font-family: Arial, sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   text-transform: none;
-  padding: 8px 10px;
+  padding: 9px 11px;
   text-align: center;
   cursor: pointer;
   text-decoration: none;

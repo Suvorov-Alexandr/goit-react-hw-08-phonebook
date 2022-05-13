@@ -7,58 +7,69 @@ import { useAddContactMutation } from "redux/contactsApi";
 
 function ContactForm() {
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const { data: contacts } = useSelector(getContacts);
+  const [number, setNumber] = useState("");
+  const { data } = useSelector(getContacts);
   const [addContact, { isLoading }] = useAddContactMutation();
+  const contacts = data ? Object.values(data.entities) : [];
 
   const handleInputChange = ({ target }) => {
     const { name, value } = target;
-    name === "name" ? setName(value) : setPhone(value);
+    name === "name" ? setName(value) : setNumber(value);
   };
 
-  const handleSubmit = (evt) => {
+  const handlerSubmit = (evt) => {
     evt.preventDefault();
 
     const contact = {
       name: evt.target.name.value,
-      phone: evt.target.phone.value,
+      number: evt.target.number.value,
     };
 
     const toastNameError = (name) =>
       toast.error(`Name "${name}" is already in contacts`);
 
-    const toastPhoneError = (phone) =>
-      toast.error(`Phone "${phone}" is already in contacts`);
+    const toastPhoneError = (number) =>
+      toast.error(`Phone "${number}" is already in contacts`);
 
-    const toastSuccess = () =>
+    const toastOfSuccessAddition = () =>
       toast.success(
         `"${contact.name}" has been succesfully added to the phonebook`
       );
 
-    const isNameExist = contacts?.find(({ name }) => name === contact.name);
+    const isNameExist = contacts.find(({ name }) => name === contact.name);
     if (isNameExist) {
       toastNameError(contact.name);
       return;
     }
 
-    const isPhoneExist = contacts?.find(({ phone }) => phone === contact.phone);
+    const isPhoneExist = contacts.find(
+      ({ number }) => number === contact.number
+    );
     if (isPhoneExist) {
-      toastPhoneError(contact.phone);
+      toastPhoneError(contact.number);
       return;
     }
 
-    addContact(contact, toastSuccess());
+    const isValidPhoneFormat = (phone) => {
+      const validPhoneNumberFormat = /^\+\d{2}\(\d{3}\)\d{3}-\d{2}-\d{2}$/;
+      return validPhoneNumberFormat.test(phone);
+    };
+    if (!isValidPhoneFormat(contact.number)) {
+      return;
+    }
+
+    addContact(contact, toastOfSuccessAddition());
     reset();
   };
 
   const reset = () => {
     setName("");
-    setPhone("");
+    setNumber("");
   };
 
   return (
     <Wrapper>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handlerSubmit}>
         <Label>
           <Input
             margin="normal"
@@ -74,6 +85,7 @@ function ContactForm() {
             onChange={handleInputChange}
             placeholder="Ivan Ivanov"
             autoComplete="off"
+            helperText="Please enter name"
           />
           <Label>
             <Input
@@ -82,15 +94,16 @@ function ContactForm() {
               id="outlined-required"
               label="Phone"
               type="tel"
-              name="phone"
+              name="number"
               pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
               title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
               required
-              value={phone}
+              value={number}
               onChange={handleInputChange}
               minLength={10}
-              placeholder="000-11-33-777"
+              placeholder="+38(070)777-55-33"
               autoComplete="off"
+              helperText="Please enter phone number in this format +38(090)777-55-33"
             />
           </Label>
         </Label>

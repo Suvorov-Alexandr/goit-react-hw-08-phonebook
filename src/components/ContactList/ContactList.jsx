@@ -14,8 +14,8 @@ function ContactList({ contacts }) {
         {filteredContacts?.length === 0 ? (
           <Text>Nothing found</Text>
         ) : (
-          filteredContacts?.map(({ id, name, phone }) => (
-            <ContactItem key={id} id={id} name={name} phone={phone} />
+          filteredContacts?.map(({ id, name, number }) => (
+            <ContactItem key={id} id={id} name={name} number={number} />
           ))
         )}
       </List>
